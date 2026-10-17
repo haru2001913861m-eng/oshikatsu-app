@@ -28,7 +28,8 @@
     "where": [
       "goals",
       "sum"
-    ]
+    ],
+    "a8_program": "s00000001343021"
   },
   {
     "id": "airtrip_hotel",
@@ -39,7 +40,8 @@
     "where": [
       "goals",
       "sum"
-    ]
+    ],
+    "a8_program": "s00000001343020"
   },
   {
     "id": "cherish",
@@ -49,7 +51,8 @@
     "pr": true,
     "where": [
       "home"
-    ]
+    ],
+    "a8_program": "s00000013963005"
   },
   {
     "id": "surprise",
@@ -59,6 +62,17 @@
     "pr": true,
     "where": [
       "home"
+    ],
+    "a8_program": "s00000022246002"
+  },
+  {
+    "id": "card_nl",
+    "title": "推し活用のカードを1枚に決める",
+    "body": "推し活の支払いをカード1枚にまとめると、明細で「今月いくら使ったか」が見やすくなります。年会費永年無料の三井住友カード（NL）を紹介しています。",
+    "url": "https://haru2001913861m-eng.github.io/oshikatsu-app/card-nl.html",
+    "pr": true,
+    "where": [
+      "sum"
     ]
   }
 ]
