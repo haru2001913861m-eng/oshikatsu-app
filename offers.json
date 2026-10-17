@@ -40,5 +40,25 @@
       "goals",
       "sum"
     ]
+  },
+  {
+    "id": "cherish",
+    "title": "推し色でそろえるカスタムグッズ（Cherish Palette）",
+    "body": "推し色や名前を入れたグッズを1つから作れます。現場に持っていく物を、推し色でそろえたい人に。",
+    "url": "https://px.a8.net/svt/ejp?a8mat=4BEIPD+D44RHU+2ZQM+TS3OI",
+    "pr": true,
+    "where": [
+      "home"
+    ]
+  },
+  {
+    "id": "surprise",
+    "title": "届くまで分からないボックス（サプライズボックス）",
+    "body": "推し活が楽しくなる物が届く定期便です。定期購入なので、推し予算の中で続けられるかを先に確かめてください。",
+    "url": "https://px.a8.net/svt/ejp?a8mat=4BEIPD+D5BMPE+4RNG+BWVTE",
+    "pr": true,
+    "where": [
+      "home"
+    ]
   }
 ]

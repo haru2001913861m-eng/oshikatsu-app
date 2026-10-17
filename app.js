@@ -350,7 +350,8 @@
     return `${checkHTML(false)}${ringHTML()}${nextStubHTML()}${installCardHTML()}
       <section class="card">${calHTML(ui.calMk, null, false)}</section>
       <h2 class="sec-h">${em('receipt')}さいきんの記録<button class="more" data-act="tab" data-tab="cal">すべて見る</button></h2>
-      <section class="card soft">${recListHTML([...S.records].sort(sortRec).slice(0, 4), true)}</section>`;
+      <section class="card soft">${recListHTML([...S.records].sort(sortRec).slice(0, 4), true)}</section>
+      ${offersHTML('home')}`;
   }
   const sortRec = (a, b) => b.date.localeCompare(a.date) || (b.ts || 0) - (a.ts || 0);
   function recListHTML(list, showDate) {
@@ -475,6 +476,7 @@
       && (o.where || ['sum']).includes(where));
     if (!shown.length) return '';
     const head = where === 'goals' ? ['ticket', '遠征の予約', '当選した日に押さえると慌てません。料金は日程や空き状況で変わります。']
+      : where === 'home' ? ['hearts', '推し活グッズ', '推し色で作るグッズなど。買う前に、今月の推し予算の残りを見てから。']
       : ['coin', '推し活費をつくる', '推し活以外の出費を見直すヒント。金額はプランや使い方で変わります。'];
     return `<section class="card soft" id="offers-${where}"><h2>${em(head[0])}${head[1]}</h2><p class="muted small">${head[2]}</p>
         ${shown.map((o) => `<a class="offer" href="${esc(o.url)}" target="_blank" rel="sponsored noopener noreferrer"><div class="offer-h"><span class="pr">PR</span>${esc(o.title)}</div><p>${esc(o.body)}</p><span class="go">くわしく見る ›</span></a>`).join('')}</section>`;
@@ -1141,7 +1143,7 @@
   addEventListener('appinstalled', () => { installPrompt = null; render(); });
 
   /* ---------- 起動 ---------- */
-  fetch('offers.json', { cache: 'no-cache' }).then((r) => (r.ok ? r.json() : [])).then((j) => { offers = Array.isArray(j) ? j : (j.items || []); if (ui.tab === 'sum' || ui.tab === 'goals') render(); }).catch(() => {});
+  fetch('offers.json', { cache: 'no-cache' }).then((r) => (r.ok ? r.json() : [])).then((j) => { offers = Array.isArray(j) ? j : (j.items || []); if (['sum', 'goals', 'home'].includes(ui.tab)) render(); }).catch(() => {});
   save();
   render();
   loadMetas().then(() => { if (metas.length) render(); });
