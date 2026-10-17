@@ -432,7 +432,8 @@
       </section>
       <button class="btn block" data-act="newGoal" style="margin-bottom:14px">${em('ticket')}公演・イベントを追加</button>
       <div class="seg" style="margin:0 0 14px"><button data-act="goalView" data-v="active" class="${ui.goalView === 'active' ? 'on' : ''}">これから</button><button data-act="goalView" data-v="done" class="${ui.goalView === 'done' ? 'on' : ''}">落選・終わった</button></div>
-      ${list.length ? list.map(goalCardHTML).join('') : `<section class="card soft"><div class="empty">${em('calendar')}${ui.goalView === 'active' ? '申し込んだ日に登録すると、<br>毎月いくら積み立てればいいかが出ます' : 'まだありません'}</div></section>`}`;
+      ${list.length ? list.map(goalCardHTML).join('') : `<section class="card soft"><div class="empty">${em('calendar')}${ui.goalView === 'active' ? '申し込んだ日に登録すると、<br>毎月いくら積み立てればいいかが出ます' : 'まだありません'}</div></section>`}
+      ${offersHTML('goals')}`;
   }
 
   /* ---------- まとめ ---------- */
@@ -449,7 +450,6 @@
     const dep = sum(S.goals.flatMap((g) => (g.deposits || []).filter((x) => x.t !== 'move' && mkOf(x.d) === mk)), (x) => x.a);
     const [face, msg] = gentle(spent, B);
     const p = B ? Math.min(100, Math.round(spent / B * 100)) : 0;
-    const shown = offers.filter((o) => o && o.pr !== false && typeof o.url === 'string' && /^https:\/\//.test(o.url.trim()));
     return `<section class="card">
         <div class="cal-head"><button class="nav-btn" data-act="sumPrev" aria-label="前の月">‹</button><b>${mkLabel(mk)}のまとめ</b><button class="nav-btn" data-act="sumNext" aria-label="次の月">›</button></div>
         <div class="sum-top"><div><div class="muted small">推し活に使った</div><div class="yen-big">${yen(spent)}</div></div>
@@ -466,8 +466,18 @@
       ${S.takehome ? `<section class="card soft"><h2>${em('moneybag')}お金の3つの置き場所</h2><ul class="calc">
         <li><span>手取り</span><b>${yen(S.takehome)}</b></li><li><span>固定費</span><b>− ${yen(S.fixed)}</b></li><li><span>先取り貯金</span><b>− ${yen(S.saving)}</b></li>
         <li><span>推し（守る予算）</span><b>− ${yen(S.budget)}</b></li><li><span>生活費</span><b>${yen(lifeCost())}</b></li></ul></section>` : ''}
-      ${shown.length ? `<section class="card soft" id="offers"><h2>${em('coin')}推し活費をつくる</h2><p class="muted small">推し活以外の出費を見直すヒント。金額はプランや使い方で変わります。</p>
-        ${shown.map((o) => `<a class="offer" href="${esc(o.url)}" target="_blank" rel="sponsored noopener noreferrer"><div class="offer-h"><span class="pr">PR</span>${esc(o.title)}</div><p>${esc(o.body)}</p><span class="go">くわしく見る ›</span></a>`).join('')}</section>` : ''}`;
+      ${offersHTML('sum')}`;
+  }
+
+  /* PR の紹介（offers.json）。url が https の物だけ・必ず PR 表記。where（sum／goals）で置き場所を出し分ける。where 無しは sum */
+  function offersHTML(where) {
+    const shown = offers.filter((o) => o && o.pr !== false && typeof o.url === 'string' && /^https:\/\//.test(o.url.trim())
+      && (o.where || ['sum']).includes(where));
+    if (!shown.length) return '';
+    const head = where === 'goals' ? ['ticket', '遠征の予約', '当選した日に押さえると慌てません。料金は日程や空き状況で変わります。']
+      : ['coin', '推し活費をつくる', '推し活以外の出費を見直すヒント。金額はプランや使い方で変わります。'];
+    return `<section class="card soft" id="offers-${where}"><h2>${em(head[0])}${head[1]}</h2><p class="muted small">${head[2]}</p>
+        ${shown.map((o) => `<a class="offer" href="${esc(o.url)}" target="_blank" rel="sponsored noopener noreferrer"><div class="offer-h"><span class="pr">PR</span>${esc(o.title)}</div><p>${esc(o.body)}</p><span class="go">くわしく見る ›</span></a>`).join('')}</section>`;
   }
 
   /* ---------- ボトムシート ---------- */
@@ -1131,7 +1141,7 @@
   addEventListener('appinstalled', () => { installPrompt = null; render(); });
 
   /* ---------- 起動 ---------- */
-  fetch('offers.json', { cache: 'no-cache' }).then((r) => (r.ok ? r.json() : [])).then((j) => { offers = Array.isArray(j) ? j : (j.items || []); if (ui.tab === 'sum') render(); }).catch(() => {});
+  fetch('offers.json', { cache: 'no-cache' }).then((r) => (r.ok ? r.json() : [])).then((j) => { offers = Array.isArray(j) ? j : (j.items || []); if (ui.tab === 'sum' || ui.tab === 'goals') render(); }).catch(() => {});
   save();
   render();
   loadMetas().then(() => { if (metas.length) render(); });

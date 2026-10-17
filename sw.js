@@ -1,5 +1,5 @@
 /* 推し活家計簿 — オフライン用の控えと通知。ファイルを変えたら VERSION を上げる */
-const VERSION = 'oshi-v2-2026-10-17a';
+const VERSION = 'oshi-v2-2026-10-17b';
 importScripts('./db.js', './notice.js');
 const SHELL = [
   './', './index.html', './style.css', './app.js', './db.js', './notice.js', './share.js', './manifest.json', './offers.json',
